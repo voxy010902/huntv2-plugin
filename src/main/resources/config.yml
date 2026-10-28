@@ -1,0 +1,146 @@
+# ============================================================
+#  DeadSMP - Aventurier  |  config.yml
+#  Les textes utilisent le format MiniMessage (<red>, <bold>, ...)
+#  Fichier encodé en UTF-8.
+# ============================================================
+
+currency-symbol: "$"
+
+# ---------------- PNJ ----------------
+npc:
+  name: "<gold><bold>Aventurier</bold></gold>"
+  show-name: true
+  # Petit texte sous le nom (vide = rien)
+  description: "<gray>Clic droit pour choisir une cible"
+  # "mannequin" = PNJ avec un skin de joueur. "villager" etc. = un autre mob (pas de skin).
+  base-entity: "mannequin"
+  # Skin du PNJ. Le plus simple : mets le skin sur un compte Minecraft, puis en jeu /aventurier skin <pseudo>
+  # (la copie est gardée même si tu remets ton skin ensuite). Sinon, colle ici le "value" et la
+  # "signature" générés par mineskin.org. Tant que tout est vide, le PNJ a le skin par défaut.
+  skin:
+    value: ""
+    signature: ""
+  # Optionnel : ID d'un modèle ModelEngine (nom du .bbmodel sans l'extension).
+  # Laisse vide pour utiliser le skin ci-dessus. Si rempli, le modèle remplace le skin.
+  model-id: ""
+  # Cache l'entité de base quand un modèle ModelEngine est appliqué
+  hide-base-entity: true
+
+# ---------------- Menu ----------------
+menu:
+  title: "<dark_gray>Aventurier <gray>- <dark_red>Choisis ta cible"
+  head-name: "<yellow><player>"
+  head-lore:
+    - "<gray>Rank : <rank>"
+    - "<gray>Récompense : <green><reward>"
+    - " "
+    - "<yellow>Clique pour choisir cette cible"
+  empty: "<red>Aucun autre joueur n'est connecté"
+
+# ---------------- Récompenses ----------------
+rewards:
+  # Le montant dépend du rank de la personne CIBLÉE (celle qu'on tue), pas du chasseur.
+  # Ordre de vérification des groupes LuckPerms (du plus haut au plus bas).
+  # Le premier groupe que le joueur possède est utilisé.
+  rank-priority: [elite, pro, default]
+  # Récompense de base par groupe
+  amounts:
+    default: 500
+    pro: 750
+    elite: 1000
+  # Anti-triche : plus la VICTIME est déjà morte tuée par un joueur, moins ça rapporte.
+  # "nombre de morts PvP de la victime >= clé" -> pourcentage de la récompense.
+  anti-farm:
+    0: 100
+    5: 75
+    10: 50
+    20: 25
+    30: 0
+  # Vengeance : quand tu tues quelqu'un qui t'avait choisi comme cible auprès du PNJ,
+  # TA prime augmente (la prochaine personne qui te tue après t'avoir choisi gagne plus).
+  # Le bonus est lui aussi réduit par l'anti-triche de celui que tu as tué.
+  bounty:
+    revenge-bonus: 250      # ajouté à ta prime à chaque vengeance
+    max-bonus: 2000         # plafond du bonus (0 = pas de plafond)
+    reset-on-claim: true    # le bonus repart à zéro quand quelqu'un encaisse ta prime
+
+# ---------------- Paliers de missions ----------------
+missions:
+  # Tous les X missions réussies, une permission de la liste est débloquée, dans l'ordre :
+  # 10 missions -> rankprotest | 20 missions -> rankelitetest
+  milestone-interval: 10
+  milestone-permissions:
+    - rankprotest
+    - rankelitetest
+  # false = une mission qui ne rapporte rien (anti-triche) ne compte pas pour les paliers
+  count-missions-without-reward: false
+
+# ---------------- Chasse à l'homme ----------------
+hunt:
+  duration-minutes: 30
+  # Somme versée au joueur qui tue la cible (0 = rien)
+  kill-reward: 2500
+  # Placeholders : <name> <x> <y> <z> <world> <time>
+  bar-title: "<red><bold>CHASSE</bold></red> <dark_gray>|</dark_gray> <yellow><name></yellow> <gray>»</gray> <white>X: <x>  Y: <y>  Z: <z></white> <gray>(<world>)</gray> <dark_gray>|</dark_gray> <white><time></white>"
+  bar-title-paused: "<red><bold>CHASSE EN PAUSE</bold></red> <dark_gray>|</dark_gray> <yellow><name></yellow> <gray>est déconnecté</gray> <dark_gray>|</dark_gray> <white><time></white>"
+
+# ---------------- Scoreboard ----------------
+scoreboard:
+  title: "<red><bold>DEAD SMP</bold></red>"
+  no-target: "<gray>Aucune</gray>"
+  offline-suffix: " <dark_gray>(hors ligne)</dark_gray>"
+  # Utilisé si le joueur n'a pas de préfixe LuckPerms (codes & acceptés)
+  no-prefix: "&7Joueur"
+  # Placeholders : <target> <reward> <playtime> <deaths> <money> <rank> <player> <prime>
+  # (<prime> = ce que tu rapportes si on te tue ; tu peux l'ajouter dans les lignes ci-dessous)
+  # (15 lignes maximum)
+  lines:
+    - " "
+    - "<gold>Cible : <white><target>"
+    - "<gold>Gain : <green><reward>"
+    - " "
+    - "<gray>Temps de jeu : <white><playtime>"
+    - "<gray>Morts : <white><deaths>"
+    - "<gray>Argent : <green><money>"
+    - "<gray>Rank : <rank>"
+    - " "
+
+# ---------------- Messages ----------------
+messages:
+  prefix: "<dark_red><bold>DEAD SMP</bold></dark_red> <dark_gray>»</dark_gray> "
+  no-permission: "<prefix><red>Tu n'as pas la permission de faire ça."
+  players-only: "<prefix><red>Cette commande est réservée aux joueurs."
+  unknown-player: "<prefix><red>Joueur inconnu : <yellow><target></yellow>"
+  target-offline: "<prefix><red>Le joueur <yellow><target></yellow><red> n'est pas connecté."
+  target-offline-menu: "<prefix><red>Ce joueur vient de se déconnecter."
+  target-selected: "<prefix><gray>Nouvelle cible : <yellow><target></yellow><gray>. Récompense si tu le tues : <green><reward></green><gray>."
+  target-cleared: "<prefix><gray>Mission annulée."
+  mission-complete: "<prefix><green>Mission accomplie !</green> <gray>Tu as tué <yellow><target></yellow><gray> et reçu <green><reward></green><gray>."
+  mission-no-reward: "<prefix><gray>Tu as tué <yellow><target></yellow><gray>, mais cette personne a déjà été tuée trop souvent : <red>aucune récompense</red><gray>."
+  milestone-unlocked: "<prefix><gold>Palier atteint !</gold> <gray>Tu as accompli <yellow><count></yellow><gray> missions et débloqué la permission <green><permission></green><gray>."
+  hunt-usage: "<prefix><red>Utilisation : /hunt [joueur] ou /hunt stop"
+  hunt-start: "<prefix><red><bold>CHASSE À L'HOMME !</bold></red> <gray>Tous les joueurs doivent tuer <yellow><target></yellow><gray> en moins de <white><minutes> minutes</white><gray> !"
+  hunt-already: "<prefix><red>Une chasse est déjà en cours. Utilise /hunt stop pour l'arrêter."
+  hunt-none: "<prefix><red>Aucune chasse en cours."
+  hunt-stopped: "<prefix><gray>La chasse à <yellow><target></yellow><gray> a été arrêtée par <white><admin></white><gray>."
+  hunt-killed: "<prefix><green><killer></green> <gray>a tué <yellow><target></yellow><gray> et remporte <green><reward></green><gray> ! La chasse est terminée."
+  hunt-timeout: "<prefix><gray>Le temps est écoulé : <yellow><target></yellow><gray> a survécu à la chasse !"
+  hunt-target-left: "<prefix><gray>La cible <yellow><target></yellow><gray> s'est déconnectée : la chasse est en pause."
+  hunt-target-back: "<prefix><gray>La cible <yellow><target></yellow><gray> est de retour : la chasse reprend !"
+  hunt-you-are-target: "<prefix><red>Tu es la cible de la chasse à l'homme ! Survis jusqu'à la fin du temps imparti."
+  prime-header: "<prefix><gold>Ta prime actuelle : <green><prime></green>"
+  prime-base: "<dark_gray> • <gray>Base pour ton rank <white><rank></white> : <green><base>"
+  prime-bonus: "<dark_gray> • <gray>Bonus de vengeance : <green><bonus>"
+  prime-percent: "<dark_gray> • <gray>Tué par des joueurs <yellow><deaths></yellow> fois : <yellow><percent>%</yellow> appliqué"
+  revenge-bonus: "<prefix><gold>Vengeance !</gold> <gray>Tu as tué <yellow><target></yellow><gray>, qui te ciblait : ta prime augmente de <green>+<added></green><gray> (prime actuelle : <green><prime></green><gray>)."
+  revenge-max: "<prefix><gray>Tu as tué <yellow><target></yellow><gray>, qui te ciblait, mais ta prime est déjà au maximum."
+  aventurier-usage: "<prefix><red>Utilisation : /aventurier [spawn|remove|reload|skin|resetdeaths]"
+  skin-fetching: "<prefix><gray>Récupération du skin de <yellow><target></yellow><gray>..."
+  skin-saved: "<prefix><green>Skin de <yellow><target></yellow><green> copié sur le PNJ. Tu peux remettre ton skin d'origine."
+  skin-failed: "<prefix><red>Impossible de récupérer le skin de <yellow><target></yellow><red>. Vérifie le pseudo, attends une minute après avoir changé de skin, puis réessaie."
+  skin-reset: "<prefix><green>Copie du skin supprimée : le PNJ utilise à nouveau les valeurs du config.yml."
+  npc-spawned: "<prefix><green>PNJ Aventurier créé."
+  npc-removed: "<prefix><green>PNJ Aventurier supprimé."
+  npc-none-nearby: "<prefix><red>Aucun PNJ Aventurier à moins de 5 blocs."
+  reloaded: "<prefix><green>Configuration rechargée."
+  deaths-reset: "<prefix><green>Compteur de morts PvP de <yellow><target></yellow><green> remis à zéro."

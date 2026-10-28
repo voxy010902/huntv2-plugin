@@ -1,0 +1,35 @@
+name: DeadSMP
+version: '${project.version}'
+main: fr.deadsmp.aventurier.AventurierPlugin
+api-version: '26.2'
+description: PNJ Aventurier, missions de chasse, chasse a l'homme et scoreboard Dead SMP
+authors: [DeadSMP]
+depend: [Vault]
+softdepend: [LuckPerms, ModelEngine, Essentials, EssentialsX]
+
+commands:
+  hunt:
+    description: Lance ou arrete une chasse a l'homme
+    usage: /hunt <joueur|stop>
+    permission: deadsmp.hunt
+  prime:
+    description: Affiche ce que tu rapportes si un joueur te tue
+    usage: /prime
+    permission: deadsmp.use
+    aliases: [bounty]
+  aventurier:
+    description: Administration du PNJ Aventurier
+    usage: /aventurier <spawn|remove|reload|resetdeaths>
+    permission: deadsmp.admin
+    aliases: [dsmp]
+
+permissions:
+  deadsmp.use:
+    description: Permet de parler au PNJ Aventurier
+    default: true
+  deadsmp.hunt:
+    description: Permet de lancer/arreter une chasse a l'homme
+    default: op
+  deadsmp.admin:
+    description: Administration du plugin
+    default: op
